@@ -1,3 +1,15 @@
+<script>
+    import { isValidEmail } from "$lib/lib";
+
+    let userEmail = "";
+    let emailValidation = true;
+    let emailAuthStatus = false;
+    function getEmailFunc(e) {
+        emailValidation = isValidEmail(userEmail);
+        console.log(emailValidation);
+    }
+</script>
+
 <!-- class="w-full max-w-sm mx-auto suit-font pt-12" -->
 <div class="w-full max-w-sm mx-auto pt-12 pretendard">
     <div class="mb-5 text-center mx-auto h-7">
@@ -18,18 +30,34 @@
                             type="search"
                             class="block w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                             placeholder="이메일 인증을 완료해주세요"
+                            bind:value={userEmail}
+                            on:input={getEmailFunc}
                         />
 
-                        <div
-                            class="text-white absolute right-2.5 bottom-2.5 bg-gray-500 font-medium rounded-lg text-sm px-3 py-1"
-                        >
-                            인증발송
-                        </div>
+                        {#if emailValidation && userEmail}
+                            <button
+                                class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 active:bg-blue-600 font-medium rounded-lg text-sm px-3 py-1"
+                            >
+                                인증발송
+                            </button>
+                        {:else}
+                            <div
+                                class="text-white absolute right-2.5 bottom-2.5 bg-gray-500 font-medium rounded-lg text-sm px-3 py-1"
+                            >
+                                인증발송
+                            </div>
+                        {/if}
                     </div>
 
-                    <div class="mt-2 ml-2 text-red-600 text-xs">
-                        이미 가입된 이메일이 있습니다.
-                    </div>
+                    {#if !emailValidation}
+                        <div class="mt-2 ml-2 text-red-600 text-xs">
+                            이메일 형식을 확인해주세요
+                        </div>
+                    {:else if emailValidation && userEmail && !emailAuthStatus}
+                        <div class="mt-2 ml-2 text-blue-600 text-xs">
+                            인증을 완료 해주세요
+                        </div>
+                    {/if}
                 </div>
             </div>
 
