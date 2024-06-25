@@ -44,7 +44,8 @@
 
 <style>
     :global(.max_screen) {
-        max-width: 900px;
+        max-width: 800px;
+        padding: 0 10px;
     }
 
     :global(.pretendard) {

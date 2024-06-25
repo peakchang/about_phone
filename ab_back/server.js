@@ -8,6 +8,9 @@ const app = express();
 
 dotenv.config();
 
+import { authRouter } from './routes/auth.js'
+
+
 
 app.set('port', process.env.PORT || 3093);
 app.set('trust proxy', '127.0.0.1');
@@ -35,6 +38,7 @@ let corsOptions = {
 }
 app.use(cors(corsOptions));
 
+app.use('/api/v9/auth', authRouter);
 
 app.get('/chkserver', (req, res) => {
     res.send('서버 생성 완료!!!!')

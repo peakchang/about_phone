@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS sub_board(
     sb_updated_at DATETIME
 );
 
-CREATE TABLE IF NOT EXISTS member(
+CREATE TABLE IF NOT EXISTS members(
     mb_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     mb_email VARCHAR(50) UNIQUE,
     mb_phone VARCHAR(50),

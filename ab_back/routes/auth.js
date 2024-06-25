@@ -18,12 +18,16 @@ authRouter.post('/join', async (req, res, next) => {
     const body = req.body;
     let status = true;
     let message;
+    console.log(body);
+    console.log('*******************************');
 
     try {
         body['mb_pwd'] = await bcrypt.hash(body.mb_pwd, 12);
         const now = moment().format('YYYY-MM-DD HH:mm:ss')
         const mbStr = getQueryStr(body, 'insert', 'mb_created_at')
+        console.log(mbStr);
         const joinQuery = `INSERT INTO members (${mbStr.str}) VALUES (${mbStr.question})`;
+        console.log(joinQuery);
         await sql_con.promise().query(joinQuery, mbStr.values);
     } catch (error) {
         status = false;
@@ -42,6 +46,7 @@ authRouter.post('/join', async (req, res, next) => {
 
 // 회원가입 시 이메일 인증 발송하기
 authRouter.use('/join_email_chk', async (req, res, next) => {
+    console.log('일단 여기는 들어오니?!?!?!');
     let status = true;
     let duplicated = false;
     try {
