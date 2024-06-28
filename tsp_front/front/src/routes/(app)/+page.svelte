@@ -1,5 +1,16 @@
 <div class="">
-    <div class="text-xl font-semibold">지역별 성지를 만나보세요</div>
+    <div>
+        <span class="text-xl font-semibold mr-2">
+            지역별 성지를 만나보세요
+        </span>
+
+        <a href="/sungji">
+            <span class="text-xs md:text-sm text-green-600">
+                전체보기 <i class="fa fa-angle-double-right" aria-hidden="true"
+                ></i>
+            </span>
+        </a>
+    </div>
     <div class="mt-5 flex">
         <button
             class="w-20 h-12 md:w-20 md:h-14 border-2 md:border-4 mx-auto rounded-full mb-4 border-cyan-600 bg-gray-100"
@@ -37,9 +48,7 @@
         <div class="h-32 border rounded-md p-2 text-sm">
             성지 시세표 보는 방법
         </div>
-        <div class="h-32 border rounded-md p-2 text-sm">
-            휴대폰 구매 A to Z
-        </div>
+        <div class="h-32 border rounded-md p-2 text-sm">휴대폰 구매 A to Z</div>
         <div class="h-32 border rounded-md p-2 text-sm">
             휴대폰 구입시 사기 안당하는법
         </div>
@@ -48,14 +57,49 @@
 
 <div class="mt-10">
     <div>
-        <span class="text-xl font-semibold mr-5">
+        <span class="text-lg md:text-xl font-semibold mr-2">
             더싼폰 커뮤니티에 물어보세요
         </span>
-        <span class="text-sm text-green-600">
+        <span class="text-xs md:text-sm text-green-600">
             전체보기 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
         </span>
     </div>
     <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-2">
+        <!-- 세트 -->
+        <div class="flex w-full gap-2 min-h-16">
+            <div
+                class=" h-16 w-20 bg-[url('/sample_img/3sldjfliwjef.png')] bg-cover bg-center bg-no-repeat border rounded-md flex-shrink-0"
+            />
+
+            <div class="flex flex-col justify-center">
+                <div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
+                    <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
+                        Lorem ipsum dolor sit amet consectetur, adipisicing
+                        elit. Optio quas quaerat, ipsam ipsa natus delectus,
+                        aliquam, id quibusdam laudantium incidunt debitis magni
+                        odio dolores est quo? Nesciunt quibusdam vel et?
+                    </div>
+                    <div class="text-xs text-gray-600">
+                        <div class="inline-block mr-1.5">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            <span>관리자</span>
+                        </div>
+
+                        <div class="inline-block mr-1.5">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            <span>24/06/09</span>
+                        </div>
+
+                        <div class="inline-block">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                            <span>2408</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 세트 끝 -->
 
         <!-- 세트 -->
         <div class="flex w-full gap-2 min-h-16">
@@ -65,9 +109,7 @@
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -95,17 +137,15 @@
         </div>
         <!-- 세트 끝 -->
 
-         <!-- 세트 -->
-         <div class="flex w-full gap-2 min-h-16">
+        <!-- 세트 -->
+        <div class="flex w-full gap-2 min-h-16">
             <div
                 class=" h-16 w-20 bg-[url('/sample_img/3sldjfliwjef.png')] bg-cover bg-center bg-no-repeat border rounded-md flex-shrink-0"
             />
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -133,17 +173,15 @@
         </div>
         <!-- 세트 끝 -->
 
-         <!-- 세트 -->
-         <div class="flex w-full gap-2 min-h-16">
+        <!-- 세트 -->
+        <div class="flex w-full gap-2 min-h-16">
             <div
                 class=" h-16 w-20 bg-[url('/sample_img/3sldjfliwjef.png')] bg-cover bg-center bg-no-repeat border rounded-md flex-shrink-0"
             />
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -171,17 +209,15 @@
         </div>
         <!-- 세트 끝 -->
 
-         <!-- 세트 -->
-         <div class="flex w-full gap-2 min-h-16">
+        <!-- 세트 -->
+        <div class="flex w-full gap-2 min-h-16">
             <div
                 class=" h-16 w-20 bg-[url('/sample_img/3sldjfliwjef.png')] bg-cover bg-center bg-no-repeat border rounded-md flex-shrink-0"
             />
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -209,55 +245,15 @@
         </div>
         <!-- 세트 끝 -->
 
-         <!-- 세트 -->
-         <div class="flex w-full gap-2 min-h-16">
+        <!-- 세트 -->
+        <div class="flex w-full gap-2 min-h-16">
             <div
                 class=" h-16 w-20 bg-[url('/sample_img/3sldjfliwjef.png')] bg-cover bg-center bg-no-repeat border rounded-md flex-shrink-0"
             />
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
-                    <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
-                        Lorem ipsum dolor sit amet consectetur, adipisicing
-                        elit. Optio quas quaerat, ipsam ipsa natus delectus,
-                        aliquam, id quibusdam laudantium incidunt debitis magni
-                        odio dolores est quo? Nesciunt quibusdam vel et?
-                    </div>
-                    <div class="text-xs text-gray-600">
-                        <div class="inline-block mr-1.5">
-                            <i class="fa fa-user" aria-hidden="true"></i>
-                            <span>관리자</span>
-                        </div>
-
-                        <div class="inline-block mr-1.5">
-                            <i class="fa fa-clock-o" aria-hidden="true"></i>
-                            <span>24/06/09</span>
-                        </div>
-
-                        <div class="inline-block">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
-                            <span>2408</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 세트 끝 -->
-
-         <!-- 세트 -->
-         <div class="flex w-full gap-2 min-h-16">
-            <div
-                class=" h-16 w-20 bg-[url('/sample_img/3sldjfliwjef.png')] bg-cover bg-center bg-no-repeat border rounded-md flex-shrink-0"
-            />
-
-            <div class="flex flex-col justify-center">
-                <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -288,8 +284,13 @@
 </div>
 
 <div class="mt-10">
-    <div class="text-xl font-semibold">
-        구매자들의 다양한 후기를 확인해보세요
+    <div class="">
+        <span class="text-lg md:text-xl font-semibold mr-2">
+            구매자들의 다양한 후기를 확인해보세요
+        </span>
+        <span class="text-xs md:text-sm text-green-600">
+            전체보기 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+        </span>
     </div>
     <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-2">
         <!-- 세트 -->
@@ -300,9 +301,7 @@
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -338,9 +337,7 @@
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -376,9 +373,7 @@
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -414,9 +409,7 @@
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -452,9 +445,7 @@
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -490,9 +481,7 @@
 
             <div class="flex flex-col justify-center">
                 <div>
-                    <div class="text-xs text-gray-600">
-                        질문게시판
-                    </div>
+                    <div class="text-xs text-gray-600">질문게시판</div>
                     <div class="w-fit flex-grow line-clamp text-sm h-5 mb-2">
                         Lorem ipsum dolor sit amet consectetur, adipisicing
                         elit. Optio quas quaerat, ipsam ipsa natus delectus,
@@ -521,9 +510,6 @@
         <!-- 세트 끝 -->
     </div>
 </div>
-
-
-
 
 <style>
     .line-clamp {
