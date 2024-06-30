@@ -15,7 +15,7 @@ export const sql_con = mysql.createConnection({
 
 /*
 
-CREATE DATABASE allthatby default CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+CREATE DATABASE tsp default CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS sub_board(
     sb_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,

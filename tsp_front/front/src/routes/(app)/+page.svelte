@@ -42,15 +42,18 @@
 <div class="mt-10">
     <div class="text-xl font-semibold">휴대폰 구매가 어렵다면 확인하세요</div>
     <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-2">
-        <div class="h-32 border rounded-md p-2 text-sm">
-            초보자 필독! 유리한 조건 선택 방법!
+        <div class="border rounded-md text-sm">
+            <img src="/main_notice/main_notice_1.jpg" alt="">
         </div>
-        <div class="h-32 border rounded-md p-2 text-sm">
-            성지 시세표 보는 방법
+        <div class="border rounded-md text-sm">
+
+            <img src="/main_notice/main_notice_2.jpg" alt="">
         </div>
-        <div class="h-32 border rounded-md p-2 text-sm">휴대폰 구매 A to Z</div>
-        <div class="h-32 border rounded-md p-2 text-sm">
-            휴대폰 구입시 사기 안당하는법
+        <div class="border rounded-md text-sm">
+            <img src="/main_notice/main_notice_3.jpg" alt="">
+        </div>
+        <div class="border rounded-md text-sm">
+            <img src="/main_notice/main_notice_1.jpg" alt="">
         </div>
     </div>
 </div>
@@ -60,9 +63,13 @@
         <span class="text-lg md:text-xl font-semibold mr-2">
             더싼폰 커뮤니티에 물어보세요
         </span>
-        <span class="text-xs md:text-sm text-green-600">
-            전체보기 <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-        </span>
+
+        <a href="/community">
+            <span class="text-xs md:text-sm text-green-600">
+                전체보기
+                <i class="fa fa-angle-double-right" aria-hidden="true"></i>
+            </span>
+        </a>
     </div>
     <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-2">
         <!-- 세트 -->
