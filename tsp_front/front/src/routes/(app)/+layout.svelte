@@ -18,12 +18,20 @@
             </div>
             <div>
                 <ul class="flex gap-5 text-sm">
-                    <li>지역별 성지</li>
+                    <a href="/sungji">
+                        <li>지역별 성지</li>
+                    </a>
                     <!-- <li>온라인 성지</li> -->
                     <!-- <li>인터넷/TV</li> -->
-                    <li>구매후기</li>
-                    <li>커뮤니티</li>
-                    <li>마이페이지</li>
+                    <a href="/review">
+                        <li>구매후기</li>
+                    </a>
+                    <a href="/community">
+                        <li>커뮤니티</li>
+                    </a>
+                    <a href="/my">
+                        <li>마이페이지</li>
+                    </a>
                 </ul>
             </div>
         </div>
@@ -266,5 +274,14 @@
 
     .nav-bar.shrink {
         height: 3rem; /* 14 in tailwind units */
+    }
+
+    :global(.line-clamp) {
+        display: -webkit-box;
+        word-break: break-word;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 </style>
