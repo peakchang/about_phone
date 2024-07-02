@@ -1,15 +1,19 @@
 <script>
-    import { page } from '$app/stores';
-    let sampleEach = [
+    import { page } from "$app/stores";
+    import { goto } from "$app/navigation";
+    const testArr = [
         0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
         20, 21, 22, 23, 24, 25, 26,
     ];
 </script>
 
-{#each sampleEach as each}
-    <!-- 세트 -->
+<!-- 세트 -->
 
-    <a href="{$page.url.pathname}/view/test">
+{#each testArr as test}
+    <a
+        href='{$page.url.pathname}/view/test'
+
+    >
         <div class="flex w-full gap-2 min-h-16">
             <div
                 class=" h-16 w-20 bg-[url('/sample_img/3sldjfliwjef.png')] bg-cover bg-center bg-no-repeat border rounded-md flex-shrink-0"
@@ -54,9 +58,6 @@
             </div>
         </div>
     </a>
-
     <!-- 세트 끝 -->
     <hr class="my-3" />
 {/each}
-
-<div>pagination</div>

@@ -1,3 +1,11 @@
+<script>
+    import { page } from "$app/stores";
+    const saslslsiii = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+        20, 21, 22, 23, 24, 25, 26,
+    ];
+</script>
+
 <div class="flex flex-row pt-3">
     <div class="hidden md:block left-fix flex-shrink-0">
         <div class="border-b filter_menu" style="">지역 필터</div>
@@ -41,6 +49,7 @@
         </div>
     </div>
     <div class="w-full">
+        
         <slot></slot>
     </div>
 </div>
