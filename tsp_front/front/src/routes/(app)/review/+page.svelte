@@ -1,12 +1,11 @@
 <script>
     import { page } from "$app/stores";
     let sampleEach = [
-        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
-        20, 21, 22, 23, 24, 25, 26,
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9
     ];
 </script>
 
-<div>
+<div class="pt-3">
     {#each sampleEach as each}
         <!-- 세트 -->
         <div class="flex w-full gap-2 min-h-16">

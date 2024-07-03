@@ -1,13 +1,43 @@
 <script>
     import { fly, scale } from "svelte/transition";
     let y;
+    import { sunEditor } from "$lib/store";
+    console.log($sunEditor);
 </script>
 
+<svelte:head>
+    <link
+        href="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/css/suneditor.min.css"
+        rel="stylesheet"
+    />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor.css" rel="stylesheet"> -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor-contents.css" rel="stylesheet"> -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/suneditor.min.js"
+    ></script>
+    <!-- languages (Basic Language: English/en) -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/suneditor@latest/src/lang/ko.js"
+    ></script>
+</svelte:head>
 <svelte:window bind:scrollY={y} />
 
-<div class="hidden md:block">
+<!-- <div class="fixed top-0 left-0 w-full bg-white h-10" class:shrink={y > 100}>
+        <div class="flex items-center max_screen pretendard mx-auto h-full">
+            <div>
+                <a href="/">LOGO</a>
+            </div>
+        </div>
+        <hr class="bg-gray-200 border-0" style="height: 1px;" />
+    </div>
+
+    <div class="max_screen pretendard mx-auto mt-14">
+        <slot></slot>
+    </div> -->
+
+<div class="">
     <div
-        class="fixed top-0 left-0 w-full bg-white nav-bar"
+        class="fixed top-0 left-0 w-full bg-white nav-bar small-screen z-50"
         class:shrink={y > 100}
     >
         <div
@@ -16,7 +46,7 @@
             <div>
                 <a href="/">LOGO</a>
             </div>
-            <div>
+            <div class="hidden md:block">
                 <ul class="flex gap-5 text-sm">
                     <a href="/sungji">
                         <li>지역별 성지</li>
@@ -38,27 +68,13 @@
         <hr class="bg-gray-200 border-0" style="height: 1px;" />
     </div>
 
-    <div class="pt-20"></div>
-
+    <div class="pt-10 md:pt-20"></div>
     <div class="max_screen pretendard mx-auto mt-5">
         <slot></slot>
     </div>
 </div>
 
 <div class="block md:hidden px-3 pretendard">
-    <div class="fixed top-0 left-0 w-full bg-white h-10" class:shrink={y > 100}>
-        <div class="flex items-center max_screen pretendard mx-auto h-full">
-            <div>
-                <a href="/">LOGO</a>
-            </div>
-        </div>
-        <hr class="bg-gray-200 border-0" style="height: 1px;" />
-    </div>
-
-    <div class="max_screen pretendard mx-auto mt-14">
-        <slot></slot>
-    </div>
-
     <div class="fixed left-0 bottom-0 w-full h-14 bg-white border-t">
         <ul class="flex justify-around text-xs py-1.5">
             <li class="flex flex-col justify-center items-center gap-1">
@@ -270,6 +286,16 @@
     .nav-bar {
         height: 5rem; /* 20 in tailwind units */
         transition: height 0.3s ease;
+    }
+    @media (max-width: 768) {
+        .nav-bar {
+            background-color: red;
+        }
+    }
+    @media (max-width: 800px) {
+        .small-screen {
+            height: 3rem;
+        }
     }
 
     .nav-bar.shrink {

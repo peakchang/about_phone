@@ -9,7 +9,7 @@ const app = express();
 dotenv.config();
 
 import { authRouter } from './routes/auth.js'
-
+import { editorRouter } from './routes/editor.js';
 
 
 app.set('port', process.env.PORT || 3093);
@@ -39,6 +39,8 @@ let corsOptions = {
 app.use(cors(corsOptions));
 
 app.use('/api/v9/auth', authRouter);
+app.use('/api/v9/editor', editorRouter);
+
 
 app.get('/chkserver', (req, res) => {
     res.send('서버 생성 완료!!!!')

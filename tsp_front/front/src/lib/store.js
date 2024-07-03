@@ -9,3 +9,5 @@ export let imgArr = writable([]);
 
 export let admin_sidebar = writable(false);
 export let admin_sidebar_width = writable(false);
+
+export let sunEditor = writable('');

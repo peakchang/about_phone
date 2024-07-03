@@ -1,3 +1,7 @@
+<script>
+    
+</script>
+
 <div class="mb-3">
     <button>목록</button>
 </div>

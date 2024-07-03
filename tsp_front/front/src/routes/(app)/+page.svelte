@@ -1,3 +1,7 @@
+<script>
+    import { onMount } from "svelte";
+</script>
+
 <div class="">
     <div>
         <span class="text-xl font-semibold mr-2">
@@ -43,17 +47,16 @@
     <div class="text-xl font-semibold">휴대폰 구매가 어렵다면 확인하세요</div>
     <div class="mt-5 grid grid-cols-2 md:grid-cols-4 gap-2">
         <div class="border rounded-md text-sm">
-            <img src="/main_notice/main_notice_1.jpg" alt="">
+            <img src="/main_notice/main_notice_1.jpg" alt="" />
         </div>
         <div class="border rounded-md text-sm">
-
-            <img src="/main_notice/main_notice_2.jpg" alt="">
+            <img src="/main_notice/main_notice_2.jpg" alt="" />
         </div>
         <div class="border rounded-md text-sm">
-            <img src="/main_notice/main_notice_3.jpg" alt="">
+            <img src="/main_notice/main_notice_3.jpg" alt="" />
         </div>
         <div class="border rounded-md text-sm">
-            <img src="/main_notice/main_notice_1.jpg" alt="">
+            <img src="/main_notice/main_notice_1.jpg" alt="" />
         </div>
     </div>
 </div>

@@ -4,6 +4,7 @@ import { back_api } from "./const";
 import { goto } from "$app/navigation";
 
 
+
 export const isStrongPassword = (password) => {
     // 비밀번호가 6자리 이상이고, 숫자, 문자, 특수문자가 혼합되었는지 확인하는 정규표현식
     const regex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*\W).{6,}$/;

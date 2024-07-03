@@ -1,4 +1,12 @@
-
+<div class="border-b pb-2 text-right">
+    <a href="/write">
+        <button
+            class="py-1 px-3 bg-blue-500 active:bg-blue-600 text-xs md:text-sm text-white rounded-md"
+        >
+            글 작성하기
+        </button>
+    </a>
+</div>
 
 <div class="flex flex-row pt-3">
     <div class="hidden md:block left-fix flex-shrink-0">
