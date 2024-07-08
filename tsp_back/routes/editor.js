@@ -188,6 +188,8 @@ editorRouter.post('/editor_img_upload', editor_img_upload.single('editorimg'), a
     let baseUrl
     let saveUrl
 
+    console.log(req.file);
+
     const lastFolderArr = req.file.destination.split('/');
     console.log(lastFolderArr);
     const lastFolder = lastFolderArr[lastFolderArr.length - 1];

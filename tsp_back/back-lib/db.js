@@ -49,6 +49,43 @@ CREATE TABLE IF NOT EXISTS members(
     mb_deleted_at DATETIME 
 );
 
+
+
+CREATE TABLE community (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    member_id INT,
+    title VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    category VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (member_id) REFERENCES members(mb_id)
+);
+
+
+CREATE TABLE community_comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    post_id INT,
+    parent_id INT NULL,
+    member_id INT,
+    content TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (post_id) REFERENCES community(id),
+    FOREIGN KEY (parent_id) REFERENCES community_comments(id),
+    FOREIGN KEY (member_id) REFERENCES members(mb_id),
+    INDEX (post_id),
+    INDEX (parent_id)
+);
+
+
+
+
+
+
+
+
+
 CREATE TABLE IF NOT EXISTS land(
     ld_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     ld_domain VARCHAR(50) UNIQUE,

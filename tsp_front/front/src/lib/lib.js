@@ -4,6 +4,49 @@ import { back_api } from "./const";
 import { goto } from "$app/navigation";
 
 
+// ******************  에디터 관련
+
+// 글 작성(업로드)시 HTML 태그에서 base64 코드 
+export function extractAndReplaceBase64(htmlContent) {
+    // 정규식으로 base64 코드를 찾기
+    const base64Regex = /<img\s+[^>]*src="(data:[^"]*)"[^>]*>/g;
+    let base64Codes = [];
+    let match;
+
+    // HTML 내용에서 base64 이미지를 찾고 배열에 저장
+    while ((match = base64Regex.exec(htmlContent)) !== null) {
+        base64Codes.push(match[1]);
+    }
+
+    // base64 코드를 "업로드한 이미지"로 대체
+    const updatedHtmlContent = htmlContent.replace(
+        base64Regex,
+        '<img src="업로드한 이미지" alt="" />',
+    );
+
+    return { updatedHtmlContent, base64Codes };
+}
+
+// 업로드 후 "업로드한 이미지" 라고 되어 있는 부분 순차적으로 교체
+export function replaceWithImageLinks(htmlContent, imageLinks) {
+    let index = 0;
+
+    // 정규식으로 "업로드한 이미지" 부분을 찾고 링크로 대체
+    const updatedHtmlContent = htmlContent.replace(
+        /<img\s+[^>]*src="업로드한 이미지"[^>]*>/g,
+        (match) => {
+            if (index < imageLinks.length) {
+                return `<img src="${imageLinks[index++]}" alt="" />`;
+            }
+            return match; // 만약 링크가 부족하면 기존 태그 유지
+        },
+    );
+
+    return updatedHtmlContent;
+}
+
+// *************** 에디터 관련 끝~~~~
+
 
 export const isStrongPassword = (password) => {
     // 비밀번호가 6자리 이상이고, 숫자, 문자, 특수문자가 혼합되었는지 확인하는 정규표현식
@@ -25,9 +68,7 @@ export const cleanPhoneNumber = (phoneNumber) => {
 }
 
 export const isEmptyObj = (obj) => {
-
     let result = true;
-
     try {
         if (obj.constructor === Object
             && Object.keys(obj).length === 0) {
@@ -36,27 +77,11 @@ export const isEmptyObj = (obj) => {
     } catch (error) {
         result = false;
     }
-
-
-
     return result;
 }
 
 
-export const formatDate = (date, yearBool) => {
-    let returnDate;
-    const year = date.getFullYear().toString().slice(2); // '23'
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월을 2자리로
-    const day = String(date.getDate()).padStart(2, '0'); // 일을 2자리로
-    const hours = String(date.getHours()).padStart(2, '0'); // 시를 2자리로
-    const minutes = String(date.getMinutes()).padStart(2, '0'); // 분을 2자리로
-    if (yearBool) {
-        returnDate = `${year}.${month}.${day} ${hours}:${minutes}`
-    } else {
-        returnDate = `${month}.${day} ${hours}:${minutes}`
-    }
-    return returnDate
-}
+
 
 export const cookiesExpireAtMidnight = (name, value) => {
     var now = new Date();
@@ -112,24 +137,7 @@ export const moveToMiddle = (target) => {
     }, 300)
 }
 
-export const arrangeJobList = (list) => {
-    for (let i = 0; i < list.length; i++) {
-        const date = new Date(list[i].st_created_at);
-        const year = date.getFullYear().toString().slice(2); // '23'
-        const month = (date.getMonth() + 1).toString().padStart(2, "0"); // '07'
-        const day = date.getDate().toString().padStart(2, "0"); // '14'
-        list[i]["date_str"] = `${year}.${month}.${day}`;
 
-        if (list[i]['st_img']) {
-            list[i]["img_arr"] = JSON.parse(list[i]['st_img'])
-            list[i]['main_img'] = list[i]['img_arr'][0]['baseUrl']
-        }
-
-        if (list[i]['st_ad_badge_list']) {
-            list[i]['badgeArr'] = list[i]['st_ad_badge_list'].split(',')
-        }
-    }
-}
 
 export const returnObjOtherVal = (obj, inpKey, inpVal, outKey) => {
     // @ts-ignore
@@ -165,25 +173,3 @@ export const getRandomNumbers = (maxCount, count) => {
 }
 
 
-
-
-// export const goToBoardViewAddCount = async (data: any) => {
-//     try {
-//         await axios.post(`${back_api}/board/plus_view_count`, {
-//             boId: data.bo_id,
-//         });
-//     } catch (error) { }
-
-//     goto(`/community/${data.bo_category}/${data.bo_id}`);
-// }
-
-// export const goToJobViewAddCount = async (data: any) => {
-//     try {
-//         await axios.post(`${back_api}/findjob/plus_view_count`, {
-//             stId: data.st_id,
-//         });
-//     } catch (error) { }
-
-//     goto(`/findjob/${data.st_id}`);
-
-// }
