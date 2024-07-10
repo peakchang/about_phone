@@ -107,6 +107,29 @@ export const isValidEmail = (email) => {
     return emailRegex.test(email);
 }
 
+export function isValidPhoneNumber(phoneNumber) {
+    // 정규 표현식: 숫자 또는 하이픈 외의 문자가 있는지 확인
+    const regex = /^[0-9-]+$/;
+
+    // 문자열이 "010"으로 시작하는지 확인
+    if (!phoneNumber.startsWith("010")) {
+        return false;
+    }
+
+    // 문자열이 오직 숫자와 하이픈으로만 구성되어 있는지 확인
+    if (!regex.test(phoneNumber)) {
+        return false;
+    }
+
+    // 하이픈을 제거한 숫자의 길이가 11자인지 확인
+    const digitsOnly = phoneNumber.replace(/-/g, "");
+    if (digitsOnly.length !== 11) {
+        return false;
+    }
+
+    return true;
+}
+
 
 
 export const dataURItoBlob = (dataURI) => {

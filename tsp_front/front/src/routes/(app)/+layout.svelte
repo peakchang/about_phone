@@ -1,8 +1,6 @@
 <script>
     import { fly, scale } from "svelte/transition";
     let y;
-    import { sunEditor } from "$lib/store";
-    console.log($sunEditor);
 </script>
 
 <svelte:head>
@@ -59,10 +57,20 @@
                     <a href="/community">
                         <li>커뮤니티</li>
                     </a>
-                    <a href="/my">
-                        <li>마이페이지</li>
+                    <a href="/auth/login">
+                        <li>
+                            <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            로그인
+                        </li>
                     </a>
                 </ul>
+            </div>
+
+            <div class="block md:hidden text-xs">
+                <a href="/auth/login">
+                    <i class="fa fa-sign-in" aria-hidden="true"></i>
+                    로그인
+                </a>
             </div>
         </div>
         <hr class="bg-gray-200 border-0" style="height: 1px;" />

@@ -4,7 +4,12 @@
     import { onMount } from "svelte";
     import { user_info } from "$lib/store";
     import { Modal, Button } from "flowbite-svelte";
-    import { isStrongPassword, cleanPhoneNumber, isValidEmail } from "$lib/lib";
+    import {
+        isStrongPassword,
+        cleanPhoneNumber,
+        isValidEmail,
+        isValidPhoneNumber,
+    } from "$lib/lib";
     import { back_api } from "$lib/const";
 
     onMount(() => {
@@ -19,7 +24,9 @@
     // 기본 value 모음
 
     let email = "";
-    let authNumber = "";
+    let phone = "";
+    let emailAuthNumber = "";
+    let phoneAuthNumber = "";
     let nickname = "";
     let password = "";
 
@@ -35,18 +42,26 @@
 
     // 각 input창들 focus를 위한 element
     let emailArea;
+    let phoneArea;
     let nicknameArea;
     let passwordArea;
 
     // 인증번호 보내기
     let randomNumber;
-    let timerStr = "03:00";
-    let authBool = true;
-    let authSuccess = false;
+    let emailTimerStr = "03:00";
+    let phoneTimerStr = "03:00";
+    let emailAuthBool = true;
+    let phoneAuthBool = true;
+    let emailAuthSuccess = false;
+    let phoneAuthSuccess = false;
 
     // 항목들 중 중복된 항목이 있을경우를 대비해서~~
     let emailDuplicate = false;
+    let phoneDuplicate = false;
     let nicknameDuplicate = false;
+
+
+    let intervalId;
 
     // 동의 항목 체크시 전체동의가 되느냐~ 마느냐~
     $: {
@@ -54,6 +69,154 @@
             allAgree = true;
         } else {
             allAgree = false;
+        }
+    }
+
+    // 1. 이메일 인증버튼 클릭! (비어있으면 에러! / 이메일 형식 아니면 에러! / 중복된 값 있을경우 인증 창 안나오고 경고메세지!)
+    async function emailAuthPost() {
+        if (!email) {
+            alert("이메일 값이 입력되지 않았습니다. 확인해주세요");
+            emailArea.focus();
+            return false;
+        }
+
+        const emailChk = isValidEmail(email);
+        if (!emailChk) {
+            alert("이메일 형식이 잘못되었습니다. 확인해주세요");
+            emailArea.focus();
+            return false;
+        }
+
+        // 랜덤 넘버 만들어서 백에 전송 / 백에서 랜덤 넘버 DB 입력 후 문자 발송
+        try {
+            randomNumber = Math.floor(Math.random() * 900000) + 100000;
+            const res = await axios.post(`${back_api}/auth/join_email_chk`, {
+                email,
+                randomNumber,
+            });
+            if (res.data.duplicated) {
+                emailDuplicate = true;
+                return false;
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+
+        try {
+            emailAuthBool = false;
+            countdownTimer(emailOnTimerEnd, emailAuthBool, "email");
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    // 2. 이메일 인증 확인 창!!!
+    async function emailChkAuthNum() {
+        try {
+            const res = await axios.post(
+                `${back_api}/auth/join_email_auth_chk`,
+                {
+                    email,
+                    authNumber: emailAuthNumber,
+                },
+            );
+
+            // 인증 성공시 인증창 닫고 이메일 못바꾸게 변경
+            if (
+                res.data.status &&
+                res.data.auth_info.at_authnum == emailAuthNumber
+            ) {
+                alert("이메일 인증 성공했습니다!");
+                emailAuthSuccess = true;
+                emailAuthBool = true;
+            } else {
+                alert(res.data.message);
+            }
+        } catch (error) {}
+    }
+
+    // 3. 휴대폰 인증 하기~~~~~~~~~~~~
+
+    async function phoneAuthPost() {
+        if (!phone) {
+            alert("휴대폰 번호가 입력되지 않았습니다. 확인해주세요");
+            phoneArea.focus();
+            return false;
+        }
+
+        const phoneChk = isValidPhoneNumber(phone);
+        if (!phoneChk) {
+            alert("휴대폰 번호가 잘못되었습니다. 확인해주세요");
+            phoneArea.focus();
+            return false;
+        }
+
+        const cleanPhoneNum = cleanPhoneNumber(phone);
+
+        // 랜덤 넘버 만들어서 백에 전송 / 백에서 랜덤 넘버 DB 입력 후 문자 발송
+        try {
+            randomNumber = Math.floor(Math.random() * 900000) + 100000;
+            console.log(randomNumber);
+            const res = await axios.post(`${back_api}/auth/join_phone_chk`, {
+                cleanPhoneNum,
+                randomNumber,
+            });
+            if (res.data.duplicated) {
+                phoneDuplicate = true;
+                return false;
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+
+        try {
+            console.log("여기는 오니??");
+            phoneAuthBool = false;
+
+            countdownTimer(phoneOnTimerEnd, phoneAuthBool, "phone");
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    // 4. 휴대폰 인증 확인 창!!!
+    async function phoneChkAuthNum() {
+        const cleanPhoneNum = cleanPhoneNumber(phone);
+        try {
+            const res = await axios.post(
+                `${back_api}/auth/join_phone_auth_chk`,
+                {
+                    cleanPhoneNum,
+                    authNumber: phoneAuthNumber,
+                },
+            );
+
+            // 인증 성공시 인증창 닫고 이메일 못바꾸게 변경
+            if (
+                res.data.status &&
+                res.data.auth_info.at_authnum == phoneAuthNumber
+            ) {
+                alert("휴대폰 번호 인증 성공했습니다!");
+                phoneAuthSuccess = true;
+                phoneAuthBool = true;
+                clearInterval(intervalId)
+            } else {
+                alert(res.data.message);
+            }
+        } catch (error) {}
+    }
+
+    // 닉네임 입력 후 포커스 아웃 시 닉네임 체크
+    async function nicknameChk() {
+        try {
+            const res = await axios.post(`${back_api}/auth/join_nick_chk`, {
+                nickname,
+            });
+            if (res.data.duplicated) {
+                nicknameDuplicate = true;
+            }
+        } catch (error) {
+            console.error(error.message);
         }
     }
 
@@ -68,8 +231,8 @@
             alert("이메일을 입력해주세요");
             emailArea.focus();
             return false;
-        } else if (!authSuccess) {
-            alert("인증이 완료되지 않았습니다. 인증을 완료해주세요");
+        } else if (!emailAuthSuccess) {
+            alert("이메일 인증이 완료되지 않았습니다. 인증을 완료해주세요");
             emailArea.focus();
             return false;
         } else if (!nickname) {
@@ -104,85 +267,9 @@
                 alert(res.data.message);
             }
         } catch (error) {}
-
-        // await axios
-        //     .post(`${back_api}/auth/join`, {
-        //         email,
-        //         nickname,
-        //         password,
-        //     })
-        //     .then((res) => {
-        //         if (res.data.status == "fail") {
-        //             alert(res.data.message);
-        //             return false;
-        //         }
-        //         alert("회원가입 완료! 로그인 해주세요");
-        //         goto("/auth/login");
-        //     });
     }
 
-    async function chkAuthNum() {
-        try {
-            const res = await axios.post(
-                `${back_api}/auth/join_email_auth_chk`,
-                {
-                    email,
-                    authNumber,
-                },
-            );
-
-            // 인증 성공시 인증창 닫고 이메일 못바꾸게 변경
-            if (
-                res.data.status &&
-                res.data.auth_info.at_authnum == authNumber
-            ) {
-                alert("인증 성공했습니다!");
-                authSuccess = true;
-                authBool = true;
-            } else {
-                alert(res.data.message);
-            }
-        } catch (error) {}
-    }
-
-    async function emailAuthPost() {
-        if (!email) {
-            alert("이메일 값이 입력되지 않았습니다. 확인해주세요");
-            emailArea.focus();
-            return false;
-        }
-
-        const emailChk = isValidEmail(email);
-        if (!emailChk) {
-            alert("이메일 형식이 잘못되었습니다. 확인해주세요");
-            emailArea.focus();
-            return false;
-        }
-
-        // 랜덤 넘버 만들어서 백에 전송 / 백에서 랜덤 넘버 DB 입력 후 문자 발송
-        try {
-            randomNumber = Math.floor(Math.random() * 900000) + 100000;
-            const res = await axios.post(`${back_api}/auth/join_email_chk`, {
-                email,
-                randomNumber,
-            });
-            if (res.data.duplicated) {
-                emailDuplicate = true;
-                return false;
-            }
-        } catch (error) {
-            console.error(error.message);
-        }
-
-        try {
-            countdownTimer(onTimerEnd);
-            authBool = false;
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
-
-    // 그냥 카카오 로그인~~
+    // 여기는~~~~ 카카오 로그인~~
     const kakao_login = () => {
         const kakaoInfo = {
             // kakao_restapi: "e6c8c90ba06c8dcbe1825e0785679d30",
@@ -192,25 +279,14 @@
         location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoInfo.kakao_restapi}&redirect_uri=${kakaoInfo.kakao_redirect}&response_type=code`;
     };
 
-    // 닉네임 입력 후 포커스 아웃 시 닉네임 체크
-    async function nicknameChk() {
-        try {
-            const res = await axios.post(`${back_api}/auth/join_nick_chk`, {
-                nickname,
-            });
-            if (res.data.duplicated) {
-                nicknameDuplicate = true;
-            }
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
-
     // ******************* lib
 
-    function countdownTimer(callback) {
-        let totalSeconds = 3 * 60 - 1; // 3분을 초로 변환
-        let intervalId = setInterval(() => {
+    
+
+    function countdownTimer(callback, authBool, type) {
+        // let totalSeconds = 3 * 60 - 1; // 3분을 초로 변환
+        let totalSeconds = 10;
+        intervalId = setInterval(() => {
             if (totalSeconds <= 0) {
                 clearInterval(intervalId); // 카운트다운 종료
                 callback();
@@ -220,7 +296,12 @@
                 const timeString = `${minutes
                     .toString()
                     .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
-                timerStr = timeString;
+
+                if (type == "email") {
+                    emailTimerStr = timeString;
+                } else {
+                    phoneTimerStr = timeString;
+                }
 
                 totalSeconds--;
                 // console.log(totalSeconds);
@@ -232,20 +313,45 @@
         }, 1000); // 1초마다 감소
     }
 
-    async function onTimerEnd() {
-        timerStr = "시간 초과!";
+    async function emailOnTimerEnd() {
+        emailTimerStr = "시간 초과!";
 
         try {
             const res = await axios.post(
-                `${back_api}/auth/join_phone_auth_del`,
+                `${back_api}/auth/email_auth_over_time`,
                 {
+                    email,
                     randomNumber,
                 },
             );
 
-            alert("입력시간 초과! 다시 시도해주세요!");
-            authSuccess = false;
-            authBool = true;
+            if (res.status) {
+                alert("입력시간 초과! 다시 시도해주세요!");
+                emailAuthSuccess = false;
+                emailAuthBool = true;
+                emailTimerStr = "03:00";
+            }
+        } catch (error) {}
+    }
+
+    async function phoneOnTimerEnd(timerStr) {
+        phoneTimerStr = "시간 초과!";
+        const cleanPhoneNum = cleanPhoneNumber(phone);
+        try {
+            const res = await axios.post(
+                `${back_api}/auth/phone_auth_over_time`,
+                {
+                    cleanPhoneNum,
+                    randomNumber,
+                },
+            );
+
+            if (res.status) {
+                alert("입력시간 초과! 다시 시도해주세요!");
+                phoneAuthSuccess = false;
+                phoneAuthBool = true;
+                phoneTimerStr = "03:00";
+            }
         } catch (error) {}
     }
 </script>
@@ -272,7 +378,7 @@
                             placeholder="이메일 인증을 완료해주세요"
                             bind:value={email}
                             bind:this={emailArea}
-                            disabled={authSuccess}
+                            disabled={emailAuthSuccess}
                             on:focus={() => {
                                 emailDuplicate = false;
                             }}
@@ -280,19 +386,19 @@
                             class:text-red-600={emailDuplicate}
                         />
 
-                        {#if authBool}
+                        {#if emailAuthBool}
                             <button
                                 type="button"
                                 on:click={emailAuthPost}
                                 class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 active:bg-blue-600 font-medium rounded-lg text-sm px-3 py-1"
-                                class:hidden={authSuccess}
+                                class:hidden={emailAuthSuccess}
                             >
                                 인증발송
                             </button>
                         {:else}
                             <div
                                 class="text-white absolute right-2.5 bottom-2.5 bg-gray-500 font-medium rounded-lg text-sm px-3 py-1"
-                                class:hidden={authSuccess}
+                                class:hidden={emailAuthSuccess}
                             >
                                 인증발송
                             </div>
@@ -307,18 +413,83 @@
                 </div>
             </div>
 
-            <div class="mb-4" class:hidden={authBool}>
+            <div class="mb-4" class:hidden={emailAuthBool}>
                 <div class="relative">
                     <input
                         type="search"
                         class="block w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
-                        placeholder="인증번호 입력 {timerStr}"
-                        bind:value={authNumber}
+                        placeholder="인증번호 입력 {emailTimerStr}"
+                        bind:value={emailAuthNumber}
                     />
                     <button
                         type="button"
                         class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 active:bg-blue-600 font-medium rounded-lg text-sm px-4 py-1"
-                        on:click={chkAuthNum}
+                        on:click={emailChkAuthNum}
+                    >
+                        확인
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <span class="block text-gray-700 text-sm font-bold mb-2">
+                    휴대폰
+                </span>
+                <div class="mb-4">
+                    <div class="relative">
+                        <input
+                            type="search"
+                            class="w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                            placeholder="휴대폰 인증을 완료해주세요"
+                            bind:value={phone}
+                            bind:this={phoneArea}
+                            disabled={phoneAuthSuccess}
+                            on:focus={() => {
+                                emailDuplicate = false;
+                            }}
+                            class:bg-red-50={phoneDuplicate}
+                            class:text-red-600={phoneDuplicate}
+                        />
+
+                        {#if phoneAuthBool}
+                            <button
+                                type="button"
+                                on:click={phoneAuthPost}
+                                class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 active:bg-blue-600 font-medium rounded-lg text-sm px-3 py-1"
+                                class:hidden={phoneAuthSuccess}
+                            >
+                                인증발송
+                            </button>
+                        {:else}
+                            <div
+                                class="text-white absolute right-2.5 bottom-2.5 bg-gray-500 font-medium rounded-lg text-sm px-3 py-1"
+                                class:hidden={phoneAuthSuccess}
+                            >
+                                인증발송
+                            </div>
+                        {/if}
+                    </div>
+
+                    {#if phoneDuplicate}
+                        <div class="mt-2 ml-2 text-red-600 text-xs">
+                            이미 가입된 휴대폰 번호가 있습니다.
+                        </div>
+                    {/if}
+                </div>
+            </div>
+
+            <div class="mb-4" class:hidden={phoneAuthBool}>
+                <div class="relative">
+                    <input
+                        type="search"
+                        class="block w-full p-3 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:outline-none focus:border-blue-500"
+                        placeholder="인증번호 입력 {phoneTimerStr}"
+                        bind:value={phoneAuthNumber}
+                    />
+                    <button
+                        type="button"
+                        class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 active:bg-blue-600 font-medium rounded-lg text-sm px-4 py-1"
+                        on:click={phoneChkAuthNum}
                     >
                         확인
                     </button>

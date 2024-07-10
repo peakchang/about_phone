@@ -113,6 +113,93 @@ authRouter.use('/join_email_auth_chk', async (req, res, next) => {
     res.json({ status, auth_info, message })
 })
 
+authRouter.use('/email_auth_over_time', async (req, res, next) => {
+
+    let status = true;
+    const body = req.body;
+    const email = body.email;
+    try {
+        const deleteEmailAuthQuery = "DELETE FROM auth_temp WHERE at_email = ?";
+        await sql_con.promise().query(deleteEmailAuthQuery, [email]);
+    } catch (error) {
+        status = false;
+    }
+
+    res.json({ status })
+})
+
+
+
+authRouter.use('/join_phone_chk', async (req, res, next) => {
+
+    console.log('일단 여기는 들어오니?!?!?!');
+    let status = true;
+    let duplicated = false;
+    try {
+        const chkPhoneQuery = 'SELECT mb_phone FROM members WHERE mb_phone = ?';
+        const chkPhone = await sql_con.promise().query(chkPhoneQuery, [req.body.cleanPhoneNum]);
+        const chk_phone = chkPhone[0][0]
+
+        if (!chk_phone) {
+            const insertAuthInfo = "INSERT INTO auth_temp (at_email, at_authnum) VALUES (?, ?)";
+            await sql_con.promise().query(insertAuthInfo, [req.body.cleanPhoneNum, req.body.randomNumber]);
+            duplicated = false;
+
+            // 여기서는 문자 발송하기~~~
+
+        } else {
+            duplicated = true;
+        }
+
+    } catch (error) {
+        status = false;
+        console.error(error.message);
+    }
+
+    res.json({ status, duplicated })
+})
+
+authRouter.use('/join_phone_auth_chk', async (req, res, next) => {
+
+    console.log(req.body);
+    let status = true;
+    let message = "";
+    let auth_info = {};
+    try {
+        // 인증정보는 이메일 / 인증번호 확인 후 맞으면 체크 하자!
+        const getAuthInfoQuery = "SELECT * FROM auth_temp WHERE at_email = ? AND at_authnum = ?";
+        const getAuthInfo = await sql_con.promise().query(getAuthInfoQuery, [req.body.cleanPhoneNum, req.body.authNumber]);
+        auth_info = getAuthInfo[0][0]
+        if (!auth_info) {
+            status = false;
+            message = "인증에 실패했습니다. 휴대폰 번호 / 인증번호를 확인해주세요"
+        } else {
+            const deleteAuthQuery = "DELETE FROM auth_temp WHERE at_email = ? AND at_authnum = ?"
+            await sql_con.promise().query(deleteAuthQuery, [req.body.cleanPhoneNum, req.body.authNumber]);
+        }
+        console.log(auth_info);
+    } catch (error) {
+        message = "인증에 실패했습니다. 휴대폰 번호 / 인증번호를 확인해주세요"
+    }
+    res.json({ status, auth_info, message })
+})
+
+
+authRouter.use('/phone_auth_over_time', async (req, res, next) => {
+    let status = true;
+    const body = req.body;
+    const cleanPhoneNum = body.cleanPhoneNum;
+    try {
+        const deleteEmailAuthQuery = "DELETE FROM auth_temp WHERE at_email = ?";
+        await sql_con.promise().query(deleteEmailAuthQuery, [cleanPhoneNum]);
+    } catch (error) {
+        console.error(error.message);
+        status = false;
+    }
+
+    res.json({ status })
+})
+
 // 닉네임 중복 체크 (input창 focus out시)
 authRouter.use('/join_nick_chk', async (req, res, next) => {
 
@@ -202,13 +289,118 @@ authRouter.post('/login', async (req, res, next) => {
 // 카카오 체크
 
 authRouter.post('/kakaochk', async (req, res, next) => {
+    const data = req.body;
+    const chkKakaoUserQuery = "SELECT * FROM members WHERE mb_email = ?"
+    const chkKakaoUser = await sql_con.promise().query(chkKakaoUserQuery, [data.email]);
+    const chk_kakao_user = chkKakaoUser[0][0];
+    if (chk_kakao_user && chk_kakao_user.mb_phone && chk_kakao_user.mb_provider === 'kakao') {
+        req.body.password = 'dlkfjsldjf'
+        passport.authenticate('signin', async (err, user, info) => {
 
+            if (!user) {
+                // 유저 못찾았을시 에러 메세지와 함께 리턴
+                return res.status(400).json({ message: info.message });
+            }
+
+            try {
+                // 토큰 생성
+
+                const token = jwt.sign(
+                    { userId: user.mb_id },
+                    process.env.JWT_SECRET_KEY,
+                    { expiresIn: '7d' }
+                );
+
+
+                const cookieTime = 7 * 24 * 60 * 60 * 1000;
+                res.cookie('token', token, { sameSite: 'lax', httpOnly: true, path: '/', maxAge: cookieTime });
+
+                const updateTokenQuery = "UPDATE members SET mb_token = ? WHERE mb_id = ?";
+                await sql_con.promise().query(updateTokenQuery, [token, user.mb_id]);
+
+                const user_info = {
+                    email: user.mb_email,
+                    nick: user.mb_nick,
+                    rate: user.mb_rate,
+                    profile: user.mb_thumbnail,
+                    like_type: user.mb_like_type,
+                    like_area: user.mb_like_area,
+                    like_position: user.mb_like_position
+                }
+
+                return res.json({ user_info, status: 'success' });
+            } catch (error) {
+                return res.status(400).json({ message: error.message });
+            }
+
+
+        })(req, res, next);
+        // 동일 이메일은 있는데 mb_provider가 kakao가 아닌경우에는 리턴해서 정보 받기
+    } else {
+        return res.status(400).json({ status: 'fail' });
+    }
 })
 
 // 카카오 로그인
 
 authRouter.post('/kakaologin', async (req, res, next) => {
+    const data = req.body
+    console.log(data);
 
+
+    try {
+        const insertKakaoUserQuery = "INSERT INTO members (mb_name, mb_email, mb_phone,mb_nick, mb_thumbnail, mb_provider) VALUES (?,?,?,?,?,?)";
+        await sql_con.promise().query(insertKakaoUserQuery, [data.name, data.email, data.phone, data.nickname, data.thumbnail, data.type]);
+
+        req.body.password = 'nonono'
+        passport.authenticate('signin', async (err, user, info) => {
+            console.log(user);
+
+            if (!user) {
+                // 유저 못찾았을시 에러 메세지와 함께 리턴
+                return res.status(400).json({ message: info.message });
+            }
+
+            try {
+                // 토큰 생성
+
+                const token = jwt.sign(
+                    { userId: user.mb_id },
+                    process.env.JWT_SECRET_KEY,
+                    { expiresIn: '7d' }
+                );
+
+                const cookieTime = 7 * 24 * 60 * 60 * 1000;
+
+                res.cookie('token', token, { sameSite: 'lax', httpOnly: true, path: '/', maxAge: cookieTime });
+                const updateTokenQuery = "UPDATE members SET mb_token = ? WHERE mb_id = ?";
+                await sql_con.promise().query(updateTokenQuery, [token, user.mb_id]);
+
+                const user_info = {
+                    email: user.mb_email,
+                    nick: user.mb_nick,
+                    rate: user.mb_rate,
+                    profile: user.mb_thumbnail,
+                    like_type: user.mb_like_type,
+                    like_area: user.mb_like_area,
+                    like_position: user.mb_like_position
+                }
+
+                const obj = { userName: data.name, receiver: data.phone }
+                aligoJoinMessage(req, obj)
+
+                return res.json({ user_info });
+            } catch (error) {
+                console.log('여기서 에러가 나지는 않겠지?!?!?!??!?!?!');
+                return res.status(400).json({ message: error.message });
+            }
+
+
+        })(req, res, next);
+        // await sql_con.promise().query(insertKakaoUserQuery, [token, user.mb_id]);
+    } catch (error) {
+        console.error(error.message);
+    }
 })
 
 
