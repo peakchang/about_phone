@@ -23,19 +23,19 @@
 
     <!-- Include stylesheet -->
     <!-- Include stylesheet -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/css/suneditor.min.css"
+        rel="stylesheet"
+    />
+    <!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor.css" rel="stylesheet"> -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/suneditor@latest/assets/css/suneditor-contents.css" rel="stylesheet"> -->
     <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.3/quill.min.js"
-        type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/suneditor@latest/dist/suneditor.min.js"
     ></script>
-    
-    <link
-        href="https://cdnjs.cloudflare.com/ajax/libs/quill/2.0.0-dev.3/quill.snow.min.css"
-        rel="stylesheet"
-    />
-    <link
-        href="https://unpkg.com/quill-table-ui@1.0.5/dist/index.css"
-        rel="stylesheet"
-    />
+    <!-- languages (Basic Language: English/en) -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/suneditor@latest/src/lang/ko.js"
+    ></script>
 </svelte:head>
 <slot />
 
